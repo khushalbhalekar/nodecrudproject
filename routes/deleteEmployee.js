@@ -2,16 +2,24 @@ let express = require('express');
 let route = express.Router();
 let employeeService = require('../services/employeeService');
 
-app.delete('/deleteEmployee', (req, res) => {
-    let empId = req.body.id;
+route.delete('/deleteEmployee', async (req, res) => {
+    let empId = req.body.empId;
 
-    let employeeIndex = employeeObj.findIndex(employee => employee.id == empId);
-    console.log({ employeeIndex });
-    if (employeeIndex >= 0) {
-        employeeObj.splice(employeeIndex, 1);
+    // let employeeIndex = employeeObj.findIndex(employee => employee.id == empId);
+    // console.log({ employeeIndex });
+    // if (employeeIndex >= 0) {
+    //     employeeObj.splice(employeeIndex, 1);
+    //     res.send("Employee deleted successfully");
+    // } else {
+    //     res.send("No employee record found");
+    // }
+
+    let result = await employeeService.deleteEmployee(empId);
+    let affectedRows = result.affectedRows;
+    if (affectedRows > 0) {
         res.send("Employee deleted successfully");
     } else {
-        res.send("No employee record found");
+        res.send("Something went wrong");
     }
 });
 
